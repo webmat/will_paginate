@@ -32,8 +32,12 @@ module WillPaginate::Finders
         extend ActiveRecord
       end
 
+      # Rails 3.0 - 3.1 compatibility issue
+      aa = ::ActiveRecord::Associations
+      ac = aa.const_defined?('CollectionAssociation') ?
+              aa::CollectionAssociation : aa::AssociationCollection
       # support pagination on associations and scopes
-      [::ActiveRecord::Relation, ::ActiveRecord::Associations::AssociationCollection].each do |klass|
+      [::ActiveRecord::Relation, ac].each do |klass|
         klass.send(:include, ActiveRecord)
       end
     end
